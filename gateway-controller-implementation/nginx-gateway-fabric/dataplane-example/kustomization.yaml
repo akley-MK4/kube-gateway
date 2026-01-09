@@ -1,0 +1,5 @@
+resources:
+- app-tls.yaml
+- app.yaml
+- gateway.yaml
+- http-route.yaml

@@ -6,25 +6,21 @@ This project is about the use and configuration of the k8s gateway API.
 2. https://docs.nginx.com/nginx-gateway-fabric/install 
 
 ## Add certificates for secure authentication
-1. Install Gateway API CRDs
-```console
-kubectl kustomize "https://github.com/nginx/nginx-gateway-fabric/config/crd/gateway-api/standard?ref=v2.3.0" | kubectl apply -f -
-```
-2. Create the CA issuer
+1. Create the CA issuer
 ```console
 kubectl create namespace nginx-gateway
 ```
 ```console
 kubectl apply -f ca-issuer.yaml -n nginx-gateway
 ```
-3. Create server and client certificates
+2. Create server and client certificates
 ```console
 kubectl apply -f server-tls.yaml -n nginx-gateway
 ```
 ```console
 kubectl apply -f agent-tls.yaml -n nginx-gateway
 ```
-4. Confirm the Secrets have been created  
+3. Confirm the Secrets have been created  
 You should see the Secrets created in the nginx-gateway namespace:
 ```console
 kubectl -n nginx-gateway get secrets
@@ -47,6 +43,8 @@ Create an example in the dataplane-example directory to demonstrate how to deplo
 
 ### Test
 ```console
-export GW_PORT=31954
-curl --resolve nginx-hello.example.com:$GW_PORT:$GW_IP http://nginx-hello.example.com:$GW_PORT/
+export GW_HTTP_PORT=31954
+export GW_HTTPS_PORT=31938
+curl --resolve nginx-hello.example.com:$GW_HTTP_PORT:$GW_IP http://nginx-hello.example.com:$GW_HTTP_PORT/v1
+curl --resolve nginx-echo.example.com:$GW_HTTPS_PORT:$GW_IP https://nginx-echo.example.com:$GW_HTTPS_PORT -k
 ```
