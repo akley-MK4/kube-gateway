@@ -1,5 +1,5 @@
-# kube-gateway
-This project is about the use and configuration of the k8s gateway API.
+# nginx-gateway-fabric
+This project is about the use and configuration of the nginx-gateway-fabric.
 
 ## Reference
 1. https://docs.nginx.com/nginx-gateway-fabric
@@ -27,13 +27,18 @@ kubectl -n nginx-gateway get secrets
 ```
 
 ## Install NGINX Gateway Fabric with Helm
-### Deploy NGINX Gateway Fabric
+### Deploy
 1. Install the ctrl plane from the OCI registry
 ```console
-helm install ngf oci://ghcr.io/nginx/charts/nginx-gateway-fabric --create-namespace -n nginx-gateway --set nginx.service.type=NodePort
+helm install ngf oci://ghcr.io/nginx/charts/nginx-gateway-fabric --create-namespace -n nginx-gateway -f ./values.yaml --version 2.3.0
 ```
 
-### Uninstall NGINX Gateway Fabric
+### Upgrade
+```console
+helm upgrade ngf oci://ghcr.io/nginx/charts/nginx-gateway-fabric -n nginx-gateway -f ./values.yaml
+```
+
+### Uninstall
 ```console
 helm uninstall ngf -n nginx-gateway
 ```
@@ -43,8 +48,8 @@ Create an example in the dataplane-example directory to demonstrate how to deplo
 
 ### Test
 ```console
-export GW_HTTP_PORT=31954
-export GW_HTTPS_PORT=31938
+export GW_HTTP_PORT=30000
+export GW_HTTPS_PORT=30001
 curl --resolve nginx-hello.example.com:$GW_HTTP_PORT:$GW_IP http://nginx-hello.example.com:$GW_HTTP_PORT/v1
 curl --resolve nginx-echo.example.com:$GW_HTTPS_PORT:$GW_IP https://nginx-echo.example.com:$GW_HTTPS_PORT -k
 ```
