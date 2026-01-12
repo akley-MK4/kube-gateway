@@ -8,11 +8,30 @@ spec:
   - name: http
     port: 80
     protocol: HTTP
+    allowedRoutes:
+      kinds:
+      - kind: HTTPRoute
   - name: https
     port: 443
     protocol: HTTPS
+    allowedRoutes:
+      kinds:
+      - kind: HTTPRoute
     tls:
       mode: Terminate
       certificateRefs:
       - kind: Secret
         name: nginx-hello-app-tls
+  - name: grpc-sink
+    port: 50051
+    protocol: HTTPS
+    allowedRoutes:
+      kinds:
+      - kind: GRPCRoute
+    tls:
+      # GRPCRoute only supports Terminate mode
+      #mode: Passthrough
+      mode: Terminate
+      certificateRefs:
+      - kind: Secret
+        name: sink-app-tls

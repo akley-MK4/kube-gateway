@@ -3,3 +3,4 @@ resources:
 - app.yaml
 - gateway.yaml
 - http-route.yaml
+- grpc-route.yaml
