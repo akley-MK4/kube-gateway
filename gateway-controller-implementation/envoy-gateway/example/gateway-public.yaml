@@ -2,6 +2,7 @@ apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: eg-public
+  namespace: gateway
 spec:
   secretName: eg-public
   usages:
@@ -19,6 +20,7 @@ apiVersion: gateway.envoyproxy.io/v1alpha1
 kind: EnvoyProxy
 metadata:
   name: eg-public-proxy
+  namespace: gateway
 spec:
   provider:
     type: Kubernetes
@@ -47,6 +49,7 @@ apiVersion: gateway.networking.k8s.io/v1
 kind: Gateway
 metadata:
   name: eg-public
+  namespace: gateway
 spec:
   gatewayClassName: eg
   infrastructure:
