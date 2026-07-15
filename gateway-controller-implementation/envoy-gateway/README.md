@@ -27,16 +27,21 @@ kubectl wait --timeout=5m -n envoy-gateway-system deployment/envoy-gateway --for
 kubectl apply -f ./gateway-class.yaml
 ```
 
-5. Add a label for the namespace being used.
+5. Create ns 'gateway' for public use
+```console
+kubectl create namespace gateway
+```
+
+6. Add a label for the namespace being used.
 ```console
 kubectl label namespace wh gateway=eg-public
 ```
 
-6. Use the example directory to create examples  
+7. Use the example directory to create examples  
 
-7. Get the nodeport of gateway 'eg-public' and use it in the following browser access
+8. Get the nodeport of gateway 'eg-public' and use it in the following browser access
 ```console
 kubectl get svc -n envoy-gateway-system |grep 'eg-public'
 ```
 
-8. Use a browser to access the address http://node-ip:32749/nginx-eg
+9. Use a browser to access the address http://node-ip:32749/nginx-eg
