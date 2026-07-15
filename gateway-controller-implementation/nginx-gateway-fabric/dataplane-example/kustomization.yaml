@@ -1,5 +1,5 @@
 resources:
-- app-tls.yaml
-- app.yaml
+- nginx-hello-app.yaml
 - gateway.yaml
 - http-route.yaml
+- grpc-route.yaml

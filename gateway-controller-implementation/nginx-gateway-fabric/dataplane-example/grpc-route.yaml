@@ -1,0 +1,15 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: GRPCRoute
+metadata:
+  name: nginx-grpc-route-sink
+spec:
+  parentRefs:
+  - name: nginx-gw
+    sectionName: grpc-sink
+  hostnames:
+  - "sink-server"
+  - "sink.example.com"
+  rules:
+  - backendRefs:
+    - name: sink
+      port: 50051

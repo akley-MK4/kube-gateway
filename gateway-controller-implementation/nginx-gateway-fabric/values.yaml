@@ -12,3 +12,5 @@ nginx:
       listenerPort: 80
     - port: 30001
       listenerPort: 443
+    - port: 30002
+      listenerPort: 50051

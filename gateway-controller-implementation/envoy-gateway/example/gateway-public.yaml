@@ -1,0 +1,79 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: eg-public
+spec:
+  secretName: eg-public
+  usages:
+  - "digital signature"
+  - "key encipherment"
+  dnsNames:
+  - "*.svc.cluster.local"
+  ipAddresses:
+  - "172.0.3.3"
+  issuerRef:
+    name: akley-common-issuer
+    kind: ClusterIssuer
+---
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: EnvoyProxy
+metadata:
+  name: eg-public-proxy
+spec:
+  provider:
+    type: Kubernetes
+    kubernetes:
+      envoyService:
+        type: NodePort
+        # The current version does not support various types of path.type, so cluster wide ports will be randomly exposed
+        # patch:
+        #   type: JSONPatch
+        #   value: |
+        #     [
+        #       {"op": "replace", "path": "/spec/ports/0/nodePort", "value": 32009},
+        #       {"op": "replace", "path": "/spec/ports/1/nodePort", "value": 32010}
+        #     ]
+      envoyDeployment:
+        container:
+          resources:
+            requests:
+              cpu: 150m
+              memory: 640Mi
+            limits:
+              cpu: 500m
+              memory: 1Gi
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: eg-public
+spec:
+  gatewayClassName: eg
+  infrastructure:
+    parametersRef:
+      group: gateway.envoyproxy.io
+      kind: EnvoyProxy
+      name: eg-public-proxy
+  listeners:
+  - name: http
+    protocol: HTTP
+    port: 80
+    allowedRoutes:
+      namespaces:
+        from: Selector
+        selector:
+          matchLabels:
+            gateway: eg-public
+  - name: https
+    protocol: HTTPS
+    port: 443
+    tls:
+      mode: Terminate
+      certificateRefs:
+      - name: eg-public
+    allowedRoutes:
+      namespaces:
+        from: Selector
+        selector:
+          matchLabels:
+            gateway: eg-public
