@@ -14,7 +14,7 @@ helm show values oci://docker.io/envoyproxy/gateway-helm --version v1.8.2 > valu
 
 2. Install the ctrl plane from the OCI registry
 ```console
-helm install eg oci://docker.io/envoyproxy/gateway-helm -n envoy-gateway-system -f ./eg-values.yaml --create-namespace
+helm install eg oci://docker.io/envoyproxy/gateway-helm --version v1.8.2 -n envoy-gateway-system -f ./eg-values.yaml --create-namespace
 ```
 
 3. Wait for Envoy Gateway to become available
